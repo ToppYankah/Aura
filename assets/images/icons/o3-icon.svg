@@ -1,0 +1,8 @@
+<svg width="165" height="144" viewBox="0 0 165 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="27.5" cy="27.5" r="27.5" transform="matrix(1 0 0 -1 0 144)" fill="black"/>
+<path d="M110 27.5C110 12.3122 97.6878 0 82.5 0C67.3122 0 55 12.3122 55 27.5C55 42.6878 67.3122 55 82.5 55C97.6878 55 110 42.6878 110 27.5Z" fill="black"/>
+<path d="M110 27.5C110 12.3122 97.6878 0 82.5 0C67.3122 0 55 12.3122 55 27.5C55 42.6878 67.3122 55 82.5 55C97.6878 55 110 42.6878 110 27.5Z" fill="black"/>
+<circle cx="8.5" cy="8.5" r="8.5" transform="matrix(1 0 0 -1 38 80)" fill="black"/>
+<circle cx="8.5" cy="8.5" r="8.5" transform="matrix(1 0 0 -1 110 80)" fill="black"/>
+<circle cx="27.5" cy="27.5" r="27.5" transform="matrix(1 0 0 -1 110 144)" fill="black"/>
+</svg>

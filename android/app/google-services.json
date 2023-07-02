@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "1048250110263",
+    "project_id": "aura-aq-d5c0a",
+    "storage_bucket": "aura-aq-d5c0a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048250110263:android:0cb463f1d792f5c86bcab2",
+        "android_client_info": {
+          "package_name": "app.aura.aq"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1048250110263-4j3aptmti995o20f7al29sa5ebiludh4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.aura.aq",
+            "certificate_hash": "31f0be7223ea796bacaffa47844543627af2b8aa"
+          }
+        },
+        {
+          "client_id": "1048250110263-hguso4bo4jbj2pne9d3ihstlu386jgnd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzwdI-2JJ4B14DNkEfrGdbZOvg-TagVgw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1048250110263-co9i883da27q559m8fj8h43g9btsisci.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1048250110263-rsat6if0ss8n6u9jl2e065r8m1ikr6df.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.aura.aq"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048250110263:android:5086620ea67afdc06bcab2",
+        "android_client_info": {
+          "package_name": "aq.aura.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1048250110263-hguso4bo4jbj2pne9d3ihstlu386jgnd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzwdI-2JJ4B14DNkEfrGdbZOvg-TagVgw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1048250110263-co9i883da27q559m8fj8h43g9btsisci.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1048250110263-rsat6if0ss8n6u9jl2e065r8m1ikr6df.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.aura.aq"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

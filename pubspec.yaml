@@ -1,0 +1,87 @@
+name: aura
+description: An air quality information provider application
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  http: ^0.13.5
+  iconly: ^1.0.1
+  rxdart: ^0.27.7
+  indexed: ^0.0.8
+  iconsax: ^0.0.8
+  provider: ^6.0.4
+  geocoding: ^2.1.0
+  dash_flags: ^0.1.1
+  geolocator: ^9.0.2
+  card_swiper: ^2.0.4
+  flutter_svg: ^2.0.5
+  google_fonts: ^4.0.3
+  moment_dart: ^0.17.4
+  image_picker: ^0.8.9
+  url_launcher: ^6.1.11
+  in_app_review: ^2.0.6
+  firebase_auth: ^4.6.3
+  firebase_core: ^2.13.0
+  google_sign_in: ^6.1.4
+  figma_squircle: ^0.5.3
+  cupertino_icons: ^1.0.2
+  dotted_border: ^2.0.0+3
+  email_validator: ^2.1.17
+  the_apple_sign_in: ^1.1.1
+  firebase_storage: ^11.2.3
+  eva_icons_flutter: ^3.1.0
+  sign_in_with_apple: ^5.0.0
+  tutorial_coach_mark: ^1.2.8
+  regexed_validator: ^2.0.0+1
+  google_maps_flutter: ^2.3.0
+  shared_preferences: ^2.0.15
+  permission_handler: ^10.2.0
+  custom_map_markers: ^0.0.2+1
+  flutter_inappwebview: ^5.7.2+3
+  syncfusion_flutter_charts: ^21.2.3
+  loading_animation_widget: ^1.2.0+4
+  flutter_keyboard_visibility: ^5.4.1
+  flutter_local_notifications: ^12.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/styles/
+    - assets/images/
+    - assets/images/logo/
+    - assets/images/icons/
+    - assets/images/emojis/
+    - assets/images/background/
+    - assets/images/illustrations/
+
+  fonts:
+    - family: Gilroy
+      fonts:
+        - asset: assets/fonts/gilroy/Gilroy-ExtraBold.ttf
+        - asset: assets/fonts/gilroy/Gilroy-SemiBold.ttf
+        - asset: assets/fonts/gilroy/Gilroy-Bold.ttf
+        - asset: assets/fonts/gilroy/Gilroy-Light.ttf
+        - asset: assets/fonts/gilroy/Gilroy-Medium.ttf
+        - asset: assets/fonts/gilroy/Gilroy-Regular.ttf
+
+    - family: Lufga
+      fonts:
+        - asset: assets/fonts/lufga/Lufga-Bold.otf
+        - asset: assets/fonts/lufga/Lufga-Medium.otf
+        - asset: assets/fonts/lufga/Lufga-Regular.otf
+        - asset: assets/fonts/lufga/Lufga-SemiBold.otf
