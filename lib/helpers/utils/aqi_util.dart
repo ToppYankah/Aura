@@ -85,7 +85,7 @@ class AQIUtil {
       (element) => element.range.min <= value && element.range.max >= value,
       orElse: () => statuses.last,
     );
-    // log("AQI Value: $value --- ${output.message}");
+    
     return output;
   }
 

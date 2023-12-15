@@ -44,6 +44,12 @@ class _ChooseLocationScreenState extends State<ChooseLocationScreen> {
       context,
       viewChekcker: PreferenceKeys.CHOOSE_LOCATION_TUTORIAL,
     );
+    
+    CommonUtils.performPostBuild(
+      context,
+      Provider.of<LocationProvider>(context, listen: false)
+          .getUserCurrentLocation,
+    );
   }
 
 //  Country search handler ------

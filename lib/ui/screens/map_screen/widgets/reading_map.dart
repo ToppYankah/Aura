@@ -49,8 +49,6 @@ class _ReadingMapState extends State<ReadingMap> {
       zoomControlsEnabled: false,
       rotateGesturesEnabled: false,
       myLocationButtonEnabled: false,
-      // onTap: ,
-      
       myLocationEnabled: widget.showUserPosition,
       initialCameraPosition: widget.initialCameraPosition,
       padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 120),

@@ -1,10 +1,15 @@
+import 'package:aura/helpers/utils/common_utils.dart';
 import 'package:aura/network/api/locations/models/location_data.dart';
+import 'package:aura/network/response.dart';
+import 'package:aura/providers/location_provider.dart';
 import 'package:aura/resources/app_colors.dart';
 import 'package:aura/ui/global_components/street_name_text.dart';
 import 'package:aura/ui/global_components/theme_builder.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
 class LocationItem extends StatefulWidget {
   final bool active;
@@ -69,7 +74,43 @@ class _LocationItemState extends State<LocationItem> {
                           widget.data.name ?? "* No name provided *",
                           style: TextStyle(color: color),
                         ),
-                        _generateCityName(cityNameColor),
+                        Wrap(
+                          spacing: 20,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            _generateCityName(cityNameColor),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Wrap(
+                                spacing: 5,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  Icon(Iconsax.routing_2,
+                                      size: 15,
+                                      color: cityNameColor?.withOpacity(0.5)),
+                                  Builder(builder: (context) {
+                                    final position =
+                                        Provider.of<LocationProvider>(context)
+                                            .userPosition;
+
+                                    return Text(
+                                      CommonUtils.haversineDistance(
+                                        widget.data.coordinates!,
+                                        Coordinates(
+                                            latitude: position?.latitude,
+                                            longitude: position?.longitude),
+                                      ).toString(),
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color:
+                                              cityNameColor?.withOpacity(0.5)),
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -88,7 +129,7 @@ class _LocationItemState extends State<LocationItem> {
       child: StreetNameText(
         coords: widget.data.coordinates!,
         style: TextStyle(
-          color: color?.withOpacity(0.3),
+          color: color?.withOpacity(0.5),
           fontSize: 12,
         ),
       ),

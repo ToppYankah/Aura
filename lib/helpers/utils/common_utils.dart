@@ -1,27 +1,27 @@
 // ignore_for_file: use_build_context_synchronously
-import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
+import 'dart:async';
 import 'dart:isolate';
-import 'package:aura/helpers/utils/app_logger.dart';
-import 'package:aura/helpers/utils/prompt_util.dart';
-import 'package:aura/network/api/api_core.dart';
-import 'package:aura/network/response.dart';
-import 'package:aura/providers/location_provider.dart';
-import 'package:aura/providers/measurements_provider.dart';
-import 'package:aura/providers/settings/settings_provider.dart';
-import 'package:aura/resources/app_strings.dart';
-import 'package:aura/ui/global_components/app_loader/app_loader_modal.dart';
-import 'package:aura/ui/global_components/app_modal/app_modal.dart';
-import 'package:aura/ui/global_components/app_modal/modal_model.dart';
-import 'package:aura/ui/global_components/app_prompt/app_prompt_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
+import 'package:aura/network/response.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:aura/network/api/api_core.dart';
+import 'package:aura/resources/app_strings.dart';
+import 'package:aura/helpers/utils/app_logger.dart';
+import 'package:aura/helpers/utils/prompt_util.dart';
+import 'package:aura/providers/location_provider.dart';
+import 'package:aura/providers/measurements_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:aura/providers/settings/settings_provider.dart';
+import 'package:aura/ui/global_components/app_modal/app_modal.dart';
+import 'package:aura/ui/global_components/app_modal/modal_model.dart';
+import 'package:aura/ui/global_components/app_loader/app_loader_modal.dart';
+import 'package:aura/ui/global_components/app_prompt/app_prompt_model.dart';
 
 class CommonUtils {
   CommonUtils._();
@@ -40,7 +40,12 @@ class CommonUtils {
 
     final selectedLocation = locationProvider.selectedLocation;
 
-    log("Saving location as reference: $selectedLocation");
+    AppLogger.logOne(
+      LogItem(
+        title: "Saving location as reference",
+        data: {"data": selectedLocation},
+      ),
+    );
 
     if (selectedLocation != null) {
       final result = selectedLocation.parameters!.where(
@@ -48,7 +53,12 @@ class CommonUtils {
       );
 
       if (result.isNotEmpty) {
-        log("Params: ${result.first.id} and ${selectedLocation.id}");
+        AppLogger.logOne(
+          LogItem(
+            title: "Params",
+            data: result.first.toJson()..addAll(selectedLocation.toJson()),
+          ),
+        );
         measurementProvider.setReference = MeasurementReference(
           parameterId: result.first.id!,
           locationId: selectedLocation.id!,
@@ -62,13 +72,27 @@ class CommonUtils {
     Future? Function() action,
   ) async {
     PermissionStatus status = await Permission.location.request();
-    if (status == PermissionStatus.granted) return await action();
+    if (status == PermissionStatus.granted ||
+        status == PermissionStatus.limited) return await action();
 
-    PromptMessage toastMessage = const PromptMessage(
-      title: "Something went wrong",
-      message:
-          "Location permissions are permanently denied, we cannot request permissions.",
-    );
+    String title = switch (status) {
+      PermissionStatus.denied => 'Access Denied',
+      PermissionStatus.restricted => 'Access Restricted',
+      PermissionStatus.permanentlyDenied => 'Access Permanently Denied',
+      _ => 'Access Not Granted'
+    };
+
+    String message = switch (status) {
+      PermissionStatus.restricted =>
+        'This app is not allowed to use your current location.',
+      PermissionStatus.denied =>
+        'You have disabled the permission for this application or you\'ve previously rejected it',
+      PermissionStatus.permanentlyDenied =>
+        'The user has blocked access to their device location and/or they have declined to give access',
+      _ => 'Location access was denied'
+    };
+
+    PromptMessage toastMessage = PromptMessage(title: title, message: message);
 
     PromptUtil.show(context, toastMessage);
   }
@@ -225,7 +249,12 @@ class CommonUtils {
   static Future<T> getResponseInBackground<T>(
       jsonData, T Function(Map<String, dynamic>? data) method,
       {required T Function() orElse}) async {
-    log("Starting $T background task");
+    AppLogger.logOne(
+      LogItem(
+        title: "Starting background task",
+        data: {"type": T},
+      ),
+    );
 
     T? output = await runIsolateTask<Map<String, dynamic>, T>(
       (isolateData) => method(isolateData),
@@ -265,6 +294,41 @@ class CommonUtils {
 
     await launchUrl(phoneCallUri);
   }
+
+  static double haversineDistance(Coordinates coord1, Coordinates coord2,
+      {Unit unit = Unit.km}) {
+    AppLogger.logOne(
+      LogItem(
+          title: "Coordinates",
+          data: {"Coord1": coord1.toJson(), "Coord2": coord2.toJson()}),
+    );
+
+    const double earthRadius = 6371; // Radius of the Earth in kilometers
+
+    double dLat = _toRadians(coord2.latitude! - coord1.latitude!);
+    double dLon = _toRadians(coord2.longitude! - coord1.longitude!);
+
+    double a = pow(sin(dLat / 2), 2) +
+        cos(_toRadians(coord1.latitude!)) *
+            cos(_toRadians(coord2.latitude!)) *
+            pow(sin(dLon / 2), 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    // distance in kilometers
+    double distance = earthRadius * c;
+
+    return switch (unit) {
+      Unit.cm => distance * 100000,
+      Unit.m => distance * 1000,
+      Unit.km => distance,
+    };
+  }
+}
+
+enum Unit { km, cm, m }
+
+double _toRadians(double degrees) {
+  return degrees * pi / 180;
 }
 
 class SpawnMessage<Args> {

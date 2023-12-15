@@ -6,7 +6,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:regexed_validator/regexed_validator.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
@@ -17,6 +16,10 @@ class AuthService {
   // Getters --------------------------------------------------------------------------------
   static bool get hasUser => user != null;
   static User? get user => _firebaseAuth.currentUser;
+  static bool get userHasEmail => user?.email != null;
+  static bool get userHasDisplayName => user?.displayName != null;
+  static bool get userHasPhoneNumber => user?.phoneNumber != null;
+  static Stream<User?> get userStream => _firebaseAuth.authStateChanges();
 
   // Methods --------------------------------------------------------------------------------
   Future<bool> isEmailToken({required String email}) async {
@@ -139,9 +142,12 @@ class AuthService {
 
         success = true;
         AppLogger.logOne(
-            LogItem(
-                title: "Google Sign In Log", data: {"User: ": userResponse}),
-            type: LogType.success);
+          LogItem(title: "Google Sign In Log", data: {"User: ": userResponse}),
+          type: LogType.success,
+        );
+
+        profileIncomplete = _firebaseAuth.currentUser?.email == null &&
+            _firebaseAuth.currentUser?.displayName == null;
       }
     } on FirebaseAuthException catch (e) {
       error = e.message;
@@ -182,6 +188,14 @@ class AuthService {
     bool profileIncomplete = true;
 
     try {
+      if (!await TheAppleSignIn.isAvailable()) {
+        return (
+          success,
+          "Sorry, your device unfortunately do not support Apple sign in.",
+          profileIncomplete: profileIncomplete
+        ); //Break from the program
+      }
+
       final List<Scope> scopes = [Scope.email, Scope.fullName];
       final oAuthProvider = OAuthProvider(AppStrings.appleAuthProvider);
 
@@ -214,7 +228,8 @@ class AuthService {
         }
 
         // 5. Mark user profile as incomplete
-        if (_firebaseAuth.currentUser?.displayName == null) {
+        if (_firebaseAuth.currentUser?.displayName == null ||
+            _firebaseAuth.currentUser?.email == null) {
           profileIncomplete = true;
         }
 
@@ -279,17 +294,20 @@ class AuthService {
     return (success, error, profileIncomplete: profileIncomplete);
   }
 
-  static Future signOut() async => await _firebaseAuth.signOut();
+  static Future<(String?, bool)> completeProfile(
+      {String? email, String? username, String? photoUrl}) async {
+    String? error;
+    bool success = false;
 
-  static Future<String?> completeProfile({
-    String? email,
-    String? username,
-    PhoneAuthCredential? phoneNumber,
-  }) async {
     try {
       if (username != null) {
         assert(username.length >= 2, "Username is invalid");
         await _firebaseAuth.currentUser?.updateDisplayName(username);
+      }
+
+      if (photoUrl != null) {
+        assert(photoUrl.isNotEmpty, "Photo Url cannot be empty");
+        await _firebaseAuth.currentUser?.updatePhotoURL(photoUrl);
       }
 
       if (email != null) {
@@ -297,17 +315,24 @@ class AuthService {
         await _firebaseAuth.currentUser?.updateEmail(email);
       }
 
-      if (phoneNumber != null) {
-        await _firebaseAuth.currentUser?.updatePhoneNumber(phoneNumber);
-      }
+      await user?.reload();
+
+      success = true;
     } on AssertionError catch (e) {
-      return e.message.toString();
+      error = e.message.toString();
+    } catch (e) {
+      AppLogger.logOne(
+        LogItem(
+            title: "Complete Profile Error",
+            data: {"data": e, "type": e.runtimeType}),
+        type: LogType.error,
+      );
     }
 
-    return null;
+    return (error, success);
   }
 
-  static Future verifyPhoneNumber(
+  static Future<void> verifyPhoneNumber(
     String phone, {
     required Function(String, int?) onCodeSent,
     required Function(String) codeRetrievalTimeout,
@@ -333,5 +358,142 @@ class AuthService {
         type: LogType.error,
       );
     }
+  }
+
+  static Future<({bool success, String? error})> verifyPhoneCredential(
+      PhoneAuthCredential credential) async {
+    String? error;
+    bool success = false;
+    try {
+      await _firebaseAuth.currentUser?.updatePhoneNumber(credential);
+      await _firebaseAuth.currentUser?.reload();
+
+      success = true;
+    } on FirebaseAuthException catch (e) {
+      error = e.message;
+      AppLogger.logOne(
+        LogItem(
+          title: "Firebase Auth Exception",
+          data: {"data": e},
+        ),
+        type: LogType.error,
+      );
+    } on PlatformException catch (e) {
+      error = "Something went wrong. Please try again.";
+      AppLogger.logOne(
+        LogItem(
+          title: "Google Sign In Platform Exception",
+          data: {"data": e},
+        ),
+        type: LogType.error,
+      );
+    } on MissingPluginException catch (e) {
+      error = "Something went wrong. Please try again.";
+      AppLogger.logOne(
+        LogItem(
+          title: "Missing Plugin Exception",
+          data: {"data": e},
+        ),
+        type: LogType.error,
+      );
+    }
+
+    return (success: success, error: error);
+  }
+
+  static Future signOut() async {
+    // if(_firebaseAuth.)
+    // Get client ID for IOS devices
+    String? clientId = Platform.isIOS
+        ? DefaultFirebaseOptions.currentPlatform.iosClientId
+        : null;
+
+    GoogleSignIn googleAuth = GoogleSignIn(clientId: clientId);
+
+    await googleAuth.signOut();
+    await _firebaseAuth.signOut();
+  }
+
+  static Future<(bool success, String? error)> deleteAccount() async {
+    String? error;
+    bool success = false;
+
+    try {
+      await _firebaseAuth.currentUser?.delete();
+      success = true;
+    } on FirebaseAuthException catch (e) {
+      error = e.message;
+      AppLogger.logOne(
+        LogItem(
+          title: "Firebase Auth Delete Account Exception",
+          data: {"data": e},
+        ),
+        type: LogType.error,
+      );
+    } catch (e) {
+      error = e.toString();
+      AppLogger.logOne(
+        LogItem(
+          title: "Delete Account Exception",
+          data: {"data": e},
+        ),
+        type: LogType.error,
+      );
+    }
+
+    return (success, error);
+  }
+
+  static Future<(bool success, String? error)> changePassword(
+      {required String currentPassword,
+      required String newPassword,
+      required String confirmPassword}) async {
+    String? error;
+    bool success = false;
+
+    try {
+      final AuthCredential credential = EmailAuthProvider.credential(
+          email: user!.email!, password: currentPassword);
+
+      await _firebaseAuth.currentUser?.reauthenticateWithCredential(credential);
+
+      assert(newPassword.length > 8,
+          "Password is too short. Choose a different password.");
+      assert(newPassword == confirmPassword,
+          "Passwords do not match. Check and try again.");
+
+      await _firebaseAuth.currentUser?.updatePassword(newPassword);
+
+      success = true;
+    } on AssertionError catch (e) {
+      error = e.message.toString();
+      AppLogger.logOne(
+        LogItem(
+          title: "Firebase Auth Change Password Assertion Error",
+          data: {"data": e},
+        ),
+        type: LogType.error,
+      );
+    } on FirebaseAuthException catch (e) {
+      error = e.message;
+      AppLogger.logOne(
+        LogItem(
+          title: "Firebase Auth Change Password Exception",
+          data: {"data": e},
+        ),
+        type: LogType.error,
+      );
+    } catch (e) {
+      error = e.toString();
+      AppLogger.logOne(
+        LogItem(
+          title: "Delete Change Password Exception",
+          data: {"data": e},
+        ),
+        type: LogType.error,
+      );
+    }
+
+    return (success, error);
   }
 }

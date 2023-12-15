@@ -3,11 +3,15 @@ import 'package:aura/ui/screens/aqi_details_screen/aqi_details_screen.dart';
 import 'package:aura/ui/screens/aqi_summary_screen/aqi_summary_screen.dart';
 import 'package:aura/ui/screens/authentication/signin_screen.dart';
 import 'package:aura/ui/screens/authentication/signup_screen.dart';
+import 'package:aura/ui/screens/change_password_screen/change_password_screen.dart';
 import 'package:aura/ui/screens/complete_profile_screen/complete_profile_screen.dart';
+import 'package:aura/ui/screens/edit_profile_screen.dart/edit_profile_screen.dart';
+import 'package:aura/ui/screens/favorites_screen/favorites_screen.dart';
 import 'package:aura/ui/screens/health_tips_screen/health_tips_screen.dart';
 import 'package:aura/ui/screens/home_screen/data/home_screen_data.dart';
 import 'package:aura/ui/screens/issue_form_screen/report_issue_screen.dart';
 import 'package:aura/ui/screens/map_screen/map_screen.dart';
+import 'package:aura/ui/screens/phone_verification_screen/phone_verification_screen.dart';
 import 'package:aura/ui/screens/readings_screen/readings_screen.dart';
 import 'package:aura/ui/screens/choose_location_screen/choose_location_screen.dart';
 import 'package:aura/ui/screens/request_location_screen/request_location_screen.dart';
@@ -36,11 +40,15 @@ class ScreenRoutes {
   static const String signUp = '/signup_screen';
   static const String webView = '/web_view_screen';
   static const String reading = '/forecast_screen';
+  static const String favoriteLocations = '/favorites_screen';
   static const String onboarding = '/onboarding_screen';
   static const String issueForm = '/report_issue_screen';
   static const String aqiDetails = '/aqi_details_screen';
   static const String aqiSummary = '/aqi_summary_screen';
   static const String healthTips = '/health_tips_screen';
+  static const String editProfile = '/edit_profile_screen';
+  static const String phoneVerification = "/phone_verification";
+  static const String changePassword = '/change_password_screen';
   static const String chooseLocation = '/manual_location_screen';
   static const String completeProfile = '/complete_profile_screen';
   static const String requestLocation = '/request_location_screen';
@@ -62,10 +70,17 @@ class Navigation {
         return MaterialPageRoute(builder: (_) => const AQISummaryScreen());
       case ScreenRoutes.aqiDetails:
         return MaterialPageRoute(builder: (_) => const AQIDetailsScreen());
+      case ScreenRoutes.changePassword:
+        return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
       case ScreenRoutes.chooseLocation:
         return MaterialPageRoute(builder: (_) => const ChooseLocationScreen());
       case ScreenRoutes.completeProfile:
         return MaterialPageRoute(builder: (_) => const CompleteProfileScreen());
+      case ScreenRoutes.editProfile:
+        return MaterialPageRoute(builder: (_) => const EditProfileScreen());
+      case ScreenRoutes.favoriteLocations:
+        return MaterialPageRoute(
+            builder: (_) => const FavoriteLocationScreen());
       case ScreenRoutes.healthTips:
         return MaterialPageRoute(builder: (_) => const HealthTipsScreen());
       case ScreenRoutes.home:
@@ -78,6 +93,9 @@ class Navigation {
         return MaterialPageRoute(builder: (_) => const MapScreen());
       case ScreenRoutes.onboarding:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
+      case ScreenRoutes.phoneVerification:
+        return MaterialPageRoute(
+            builder: (_) => const PhoneVerificationScreen());
       case ScreenRoutes.requestLocation:
         return MaterialPageRoute(builder: (_) => const RequestLocationScreen());
       case ScreenRoutes.reading:
@@ -94,6 +112,47 @@ class Navigation {
       default:
         return SlidePageRoute(child: const SplashScreen());
     }
+  }
+
+  static openFavoriteLocations(BuildContext context,
+      [NavigationParams? params]) {
+    if (params?.replace ?? false) {
+      return Navigator.pushReplacementNamed(
+          context, ScreenRoutes.favoriteLocations,
+          arguments: params?.argument);
+    }
+    return Navigator.pushNamed(context, ScreenRoutes.favoriteLocations,
+        arguments: params?.argument);
+  }
+
+  static openEditProfile(BuildContext context, [NavigationParams? params]) {
+    if (params?.replace ?? false) {
+      return Navigator.pushReplacementNamed(context, ScreenRoutes.editProfile,
+          arguments: params?.argument);
+    }
+    return Navigator.pushNamed(context, ScreenRoutes.editProfile,
+        arguments: params?.argument);
+  }
+
+  static openChangePassword(BuildContext context, [NavigationParams? params]) {
+    if (params?.replace ?? false) {
+      return Navigator.pushReplacementNamed(
+          context, ScreenRoutes.changePassword,
+          arguments: params?.argument);
+    }
+    return Navigator.pushNamed(context, ScreenRoutes.changePassword,
+        arguments: params?.argument);
+  }
+
+  static openPhoneVerification(BuildContext context,
+      [NavigationParams? params]) {
+    if (params?.replace ?? false) {
+      return Navigator.pushReplacementNamed(
+          context, ScreenRoutes.phoneVerification,
+          arguments: params?.argument);
+    }
+    return Navigator.pushNamed(context, ScreenRoutes.phoneVerification,
+        arguments: params?.argument);
   }
 
   static openMap(BuildContext context, [NavigationParams<String>? params]) {
@@ -173,7 +232,8 @@ class Navigation {
         arguments: params?.argument);
   }
 
-  static openHomeScreen(BuildContext context, [NavigationParams? params]) {
+  static openHomeScreen(BuildContext context,
+      [NavigationParams<HomeScreenPage>? params]) {
     if (params?.replace ?? false) {
       return Navigator.pushReplacementNamed(context, ScreenRoutes.home,
           arguments: params?.argument);

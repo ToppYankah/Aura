@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 
 class NotificationPage extends HomePageItem {
   final List<dynamic> notifications;
-  const NotificationPage(
-      {super.key, required super.onPagePop, this.notifications = const []});
+  const NotificationPage({super.key, this.notifications = const []});
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +17,10 @@ class NotificationPage extends HomePageItem {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            AppHeader(title: "Notifications", onBack: onPagePop),
+            AppHeader(title: "Notifications", titleOnly: true),
             Expanded(
               child: notifications.isEmpty
-                  ? EmptyList(
+                  ? AppEmptyPlaceholder(
                       disabled: false,
                       onReload: () {},
                       message: "Notifications Empty",

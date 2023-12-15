@@ -7,12 +7,12 @@ import 'package:aura/ui/global_components/theme_builder.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
 
-class AppPromptNotifier extends StatefulWidget {
+class AppPromptModal extends StatefulWidget {
   final VoidCallback onClose;
   final PromptMessage message;
   final PromptOptions options;
 
-  const AppPromptNotifier({
+  const AppPromptModal({
     super.key,
     required this.onClose,
     required this.message,
@@ -20,10 +20,10 @@ class AppPromptNotifier extends StatefulWidget {
   });
 
   @override
-  State<AppPromptNotifier> createState() => _AppPromptNotifierState();
+  State<AppPromptModal> createState() => _AppPromptModalState();
 }
 
-class _AppPromptNotifierState extends State<AppPromptNotifier>
+class _AppPromptModalState extends State<AppPromptModal>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(milliseconds: 300),
@@ -49,7 +49,7 @@ class _AppPromptNotifierState extends State<AppPromptNotifier>
     switch (widget.message.type) {
       case PromptType.success:
         badgeIcon = Icons.check_rounded;
-        badgeColor = Colors.greenAccent;
+        badgeColor = Colors.green.shade400;
         break;
       case PromptType.error:
         badgeIcon = Icons.close_rounded;

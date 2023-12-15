@@ -18,21 +18,6 @@ extension ThemeContextExtension on BuildContext {
 }
 
 class ThemeProvider extends BaseProvider implements IThemeProvider {
-  // static ThemeProvider? _instance;
-  // static ThemeProvider get instance {
-  //   _instance ??= ThemeProvider._init();
-  //   return _instance!;
-  // }
-  // ThemeProvider._init();
-  //   @override
-  // void changeTheme(ThemeEnum newTheme) {
-  //   if (newTheme != currentThemeEnum) {
-  //     currentThemeEnum = newTheme;
-  //     currentTheme = newTheme.generateTheme;
-  //     notifyListeners();
-  //   }
-  //   return;
-  // }
   ThemeProvider(
       {required SharedPreferences preferences, required apiCollection})
       : super(apiCollection: apiCollection, preferences: preferences) {

@@ -1,16 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:convert';
-import 'dart:collection';
 import 'dart:developer';
-import 'package:aura/helpers/utils/app_logger.dart';
-import 'package:aura/network/api/api_core.dart';
-import 'package:aura/providers/base_provider.dart';
-import 'package:aura/network/api/locations/models/location_data.dart';
-import 'package:aura/network/api/locations/models/locations_request.dart';
-import 'package:aura/resources/app_strings.dart';
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:aura/network/api/api_core.dart';
+import 'package:aura/resources/app_strings.dart';
+import 'package:aura/providers/base_provider.dart';
+import 'package:aura/helpers/utils/app_logger.dart';
+import 'package:aura/network/api/locations/models/location_data.dart';
+import 'package:aura/network/api/locations/models/locations_request.dart';
 
 class LocationProvider extends BaseProvider {
   LocationProvider({required preferences, required apiCollection})
@@ -112,6 +112,8 @@ class LocationProvider extends BaseProvider {
         desiredAccuracy: LocationAccuracy.high,
       );
 
+      if (_userPosition == null) return;
+
       // Send coordinates to API for location details
       final LocationData? result = await _getLocationFromCoords(_userPosition!);
 
@@ -150,6 +152,17 @@ class LocationProvider extends BaseProvider {
       setError = response.error?.detail?[0].msg;
       return null;
     }
+  }
+
+  Future<bool> switchLocation(int locationId) async {
+    final LocationData? response = await _getLocationById(locationId);
+
+    if (response != null) {
+      locationValue = response;
+      return true;
+    }
+
+    return false;
   }
 
   Future<LocationData?> _getLocationFromCoords(Position position) async {

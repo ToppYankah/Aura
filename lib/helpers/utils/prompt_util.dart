@@ -10,7 +10,7 @@ class PromptUtil {
 
     entry = OverlayEntry(
       builder: (context) {
-        return AppPromptNotifier(
+        return AppPromptModal(
           message: prompt,
           onClose: () => entry?.remove(),
           options: options ?? const PromptOptions(),

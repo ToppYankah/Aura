@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:aura/resources/app_colors.dart';
 import 'package:aura/ui/global_components/section_card_title.dart';
 import 'package:aura/ui/global_components/theme_builder.dart';
@@ -67,13 +65,12 @@ class SectionCard extends StatelessWidget {
           radius: _getCardBorderRadius(),
           child: Container(
             color: background ?? theme.cardBackground,
-            // constraints: const BoxConstraints(minHeight: 200),
             child: Material(
               color: Colors.transparent,
               child: InkWell(
                 onTap: onTap,
-                splashColor: AppColors.primary.shade300.withOpacity(0.1),
-                highlightColor: AppColors.primary.shade300.withOpacity(0.1),
+                splashColor: AppColors.secondary.shade500.withOpacity(0.3),
+                highlightColor: AppColors.secondary.shade500.withOpacity(0.1),
                 borderRadius: SmoothBorderRadius(
                   cornerRadius: 40,
                   cornerSmoothing: 0.8,

@@ -68,8 +68,8 @@ class _LocationSelectionState extends State<LocationSelection> {
       return;
     }
 
-    if (countriesProvider.selectedCountry!.name == widget.fromCountry!.name &&
-        countriesProvider.selectedCountry!.name !=
+    if (countriesProvider.selectedCountry?.name == widget.fromCountry?.name &&
+        countriesProvider.selectedCountry?.name !=
             (oldWidget.fromCountry?.name ?? "")) {
       return;
     }
@@ -183,7 +183,7 @@ class _LocationSelectionState extends State<LocationSelection> {
                                   child: provider.locations.isNotEmpty
                                       ? _renderLocations(
                                           locations: provider.locations)
-                                      : EmptyList(
+                                      : AppEmptyPlaceholder(
                                           disabled: provider.isLoading,
                                           message: "No locations found",
                                           onReload: () =>

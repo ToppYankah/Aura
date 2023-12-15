@@ -9,8 +9,7 @@ import 'package:iconly/iconly.dart';
 enum HomeScreenPage { home, notifications, settings, profile }
 
 class HomePageItem extends StatelessWidget {
-  final VoidCallback onPagePop;
-  const HomePageItem({super.key, required this.onPagePop});
+  const HomePageItem({super.key});
 
   @override
   Widget build(BuildContext context) => const Placeholder();
@@ -19,12 +18,12 @@ class HomePageItem extends StatelessWidget {
 class HomeScreenConfig {
   HomeScreenConfig._();
 
-  static Map<HomeScreenPage, HomePageItem> pages(VoidCallback onPop) => {
-        HomeScreenPage.home: HomePage(onPagePop: onPop),
-        HomeScreenPage.profile: ProfilePage(onPagePop: onPop),
-        HomeScreenPage.settings: SettingsPage(onPagePop: onPop),
-        HomeScreenPage.notifications: NotificationPage(onPagePop: onPop),
-      };
+  static Map<HomeScreenPage, HomePageItem> pages = {
+    HomeScreenPage.home: const HomePage(),
+    HomeScreenPage.profile: const ProfilePage(),
+    HomeScreenPage.settings: const SettingsPage(),
+    HomeScreenPage.notifications: const NotificationPage(),
+  };
 
   static List<HomeBottomNavigationItem?> bottomNavigationOptions = const [
     HomeBottomNavigationItem(

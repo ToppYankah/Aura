@@ -1,7 +1,10 @@
+import 'package:aura/helpers/utils/common_utils.dart';
 import 'package:aura/resources/app_colors.dart';
 import 'package:aura/ui/global_components/app_icon_button.dart';
+import 'package:aura/ui/global_components/app_modal/modal_model.dart';
 import 'package:aura/ui/global_components/app_text_button.dart';
 import 'package:aura/ui/global_components/theme_builder.dart';
+import 'package:aura/ui/screens/complete_profile_screen/widgets/country_code_selector.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +12,9 @@ import 'package:iconsax/iconsax.dart';
 
 class AppTextField extends StatefulWidget {
   final String? hint;
-  final bool disabled;
   final int? maxLines;
+  final bool disabled;
+  final int? maxLength;
   final IconData? icon;
   final double textSize;
   final Widget? leading;
@@ -35,6 +39,7 @@ class AppTextField extends StatefulWidget {
     this.onChange,
     this.maxLines,
     this.focusNode,
+    this.maxLength,
     this.controller,
     this.background,
     this.textSize = 17,
@@ -52,14 +57,67 @@ class AppTextField extends StatefulWidget {
 }
 
 class _AppTextFieldState extends State<AppTextField> {
+  Widget? _leading;
   bool _showPassword = false;
   FocusNode _focusNode = FocusNode();
+  final ValueNotifier<String> _callCode = ValueNotifier<String>("+233");
 
   @override
   void initState() {
     super.initState();
 
     if (widget.focusNode != null) _focusNode = widget.focusNode!;
+
+    if (widget.type == TextInputType.phone && widget.leading == null) {
+      _setInputLeading();
+    }
+  }
+
+  void _setInputLeading() {
+    _leading = Padding(
+      padding: const EdgeInsets.only(right: 5),
+      child: ValueListenableBuilder(
+        valueListenable: _callCode,
+        builder: (context, code, _) {
+          return ThemeBuilder(builder: (theme, _) {
+            return AppTextButton(
+              text: code,
+              textSize: 16,
+              color: theme.heading,
+              enableBackground: true,
+              textWeight: FontWeight.w300,
+              onTap: _handleSelectCallCode,
+            );
+          });
+        },
+      ),
+    );
+  }
+
+  void _handleSelectCallCode() {
+    CommonUtils.showModal(
+      context,
+      child: (onClose) => CountryCallCodeSelector(
+        onClose: onClose,
+        selected: _callCode.value,
+        onSelect: (String code) => _callCode.value = code,
+      ),
+      options: const ModalOptions(title: "Select country code"),
+    );
+  }
+
+  void _handleValueChanged(String value) {
+    String output;
+
+    switch (widget.type) {
+      case TextInputType.phone:
+        output = _callCode.value + value.replaceFirst(RegExp(r'^0'), '');
+        break;
+      default:
+        output = value;
+    }
+
+    (widget.onChange ?? (String val) {})(output);
   }
 
   @override
@@ -71,7 +129,7 @@ class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
     final bool hasIcon = widget.icon != null;
-    final bool hasLeading = widget.leading != null;
+    final bool hasLeading = _leading != null;
     final obscureText = widget.type == TextInputType.visiblePassword;
 
     return ThemeBuilder(
@@ -101,14 +159,15 @@ class _AppTextFieldState extends State<AppTextField> {
                           background: Colors.transparent,
                           iconColor: theme.paragraph,
                         ),
-                      if (hasLeading) widget.leading!,
+                      if (hasLeading) _leading!,
                       Expanded(
                         child: TextField(
                           focusNode: _focusNode,
                           keyboardType: widget.type,
                           enabled: !widget.disabled,
-                          onChanged: widget.onChange,
+                          maxLength: widget.maxLength,
                           controller: widget.controller,
+                          onChanged: _handleValueChanged,
                           cursorColor: theme.paragraphDeep,
                           obscureText: !_showPassword && obscureText,
                           maxLines: obscureText ? 1 : widget.maxLines,
@@ -158,7 +217,7 @@ class _AppTextFieldState extends State<AppTextField> {
                       Text(
                         widget.hint!,
                         style: TextStyle(
-                            fontSize: 14, color: theme.placeholderText),
+                            fontSize: 13, color: theme.placeholderText),
                       ),
                     ],
                   ),

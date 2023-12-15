@@ -11,16 +11,13 @@ import 'package:aura/providers/theme_provider.dart';
 void main() {
   runZonedGuarded<Future<void>>(
     () async {
-      // debugRepaintRainbowEnabled = true;
       WidgetsFlutterBinding.ensureInitialized();
       await Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform);
 
       runApp(const AppBase(child: AuraApp()));
     },
-    (error, stack) {
-      log(error.toString());
-    },
+    (error, stack) => log(error.toString()),
   );
 }
 

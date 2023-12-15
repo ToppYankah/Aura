@@ -19,7 +19,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends HomePageItem {
-  const SettingsPage({super.key, required super.onPagePop});
+  const SettingsPage({super.key});
 
   void _handleEditRefreshInterval(BuildContext context) {
     CommonUtils.showModal(
@@ -68,7 +68,7 @@ class SettingsPage extends HomePageItem {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          AppHeader(title: "Settings", onBack: onPagePop),
+          const AppHeader(title: "Settings", titleOnly: true),
           ThemeBuilder(builder: (theme, isDark) {
             return Expanded(
               child:

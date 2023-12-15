@@ -36,61 +36,63 @@ class AppTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool showIcon = !disabled && icon != null;
-    final Color finalColor = color ?? AppColors.secondary;
-    bool iconAfter = showIcon && iconPosition == IconPosition.after;
-    bool iconBefore = showIcon && iconPosition == IconPosition.before;
+    return ThemeBuilder(
+      builder: (theme, isDark) {
+        bool showIcon = !disabled && icon != null;
 
-    final Widget iconWidget = Icon(
-      icon,
-      size: 20,
-      color: disabled ? Colors.grey : finalColor,
-    );
-
-    return ThemeBuilder(builder: (theme, isDark) {
-      return Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: disabled ? null : onTap,
-          borderRadius: SmoothBorderRadius(cornerRadius: 20),
-          child: Container(
-            decoration: BoxDecoration(
-              color: explicitBackground ??
-                  (enableBackground
-                      ? finalColor.withOpacity(0.05)
-                      : Colors.transparent),
-              borderRadius: SmoothBorderRadius(cornerRadius: 20),
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: (paddingSpace / 2), horizontal: paddingSpace),
-              child: Wrap(
-                spacing: 5,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  if (iconBefore) iconWidget,
-                  Wrap(
-                    spacing: 5,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      if (disabled) const AppLoader(size: 10),
-                      Text(
-                        disabled ? "Loading" : text,
-                        style: TextStyle(
-                          fontSize: textSize,
-                          fontWeight: textWeight,
-                          color: disabled ? Colors.grey : finalColor,
+        final Color finalColor =
+            color ?? (isDark ? AppColors.secondary : AppColors.primary);
+        final Widget iconWidget = Icon(
+          icon,
+          size: 20,
+          color: disabled ? Colors.grey : finalColor,
+        );
+        bool iconAfter = showIcon && iconPosition == IconPosition.after;
+        bool iconBefore = showIcon && iconPosition == IconPosition.before;
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: disabled ? null : onTap,
+            borderRadius: SmoothBorderRadius(cornerRadius: 20),
+            child: Container(
+              decoration: BoxDecoration(
+                color: explicitBackground ??
+                    (enableBackground
+                        ? finalColor.withOpacity(0.05)
+                        : Colors.transparent),
+                borderRadius: SmoothBorderRadius(cornerRadius: 20),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: (paddingSpace / 2), horizontal: paddingSpace),
+                child: Wrap(
+                  spacing: 5,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    if (iconBefore) iconWidget,
+                    Wrap(
+                      spacing: 5,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        if (disabled) const AppLoader(size: 10),
+                        Text(
+                          disabled ? "Loading" : text,
+                          style: TextStyle(
+                            fontSize: textSize,
+                            fontWeight: textWeight,
+                            color: disabled ? Colors.grey : finalColor,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  if (iconAfter) iconWidget,
-                ],
+                      ],
+                    ),
+                    if (iconAfter) iconWidget,
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

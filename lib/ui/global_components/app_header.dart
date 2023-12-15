@@ -7,20 +7,26 @@ import 'package:iconly/iconly.dart';
 
 class AppHeader extends StatelessWidget {
   final String? title;
+  final bool titleOnly;
   final Widget? trailing;
   final Function? onBack;
+
   const AppHeader({
     super.key,
     this.title,
     this.onBack,
     this.trailing,
+    this.titleOnly = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return ThemeBuilder(builder: (theme, _) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+        padding: EdgeInsets.symmetric(
+          vertical: titleOnly ? 20 : 10.0,
+          horizontal: 20,
+        ),
         child: Row(
           children: [
             Expanded(
@@ -28,13 +34,14 @@ class AppHeader extends StatelessWidget {
                 spacing: 20,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  AppIconButton(
-                    icon: IconlyBold.arrow_left_3,
-                    onTap: () async {
-                      await (onBack ?? () {})();
-                      Navigator.pop(context);
-                    },
-                  ),
+                  if (!titleOnly)
+                    AppIconButton(
+                      icon: IconlyBold.arrow_left_3,
+                      onTap: () async {
+                        await (onBack ?? () {})();
+                        Navigator.pop(context);
+                      },
+                    ),
                   Text(
                     title ?? "",
                     style: TextStyle(

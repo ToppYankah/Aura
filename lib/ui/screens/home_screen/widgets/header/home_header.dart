@@ -5,10 +5,15 @@ import 'package:aura/providers/location_provider.dart';
 import 'package:aura/providers/measurements_provider.dart';
 import 'package:aura/resources/app_colors.dart';
 import 'package:aura/resources/app_strings.dart';
+import 'package:aura/services/firebase/auth_service.dart';
+import 'package:aura/services/firebase/database/database_service.dart';
+import 'package:aura/services/firebase/database/models/favorite_location.dart';
 import 'package:aura/ui/global_components/app_icon_button.dart';
 import 'package:aura/ui/global_components/theme_builder.dart';
 import 'package:aura/ui/screens/home_screen/tutorial/change_location_tutorial.dart';
+import 'package:aura/ui/screens/home_screen/tutorial/favorite_location_tutorial.dart';
 import 'package:aura/ui/screens/home_screen/tutorial/home_refresh_tutorial.dart';
+import 'package:aura/ui/screens/home_screen/widgets/favorite_location_button.dart';
 import 'package:dash_flags/dash_flags.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
@@ -72,8 +77,9 @@ class _HomeHeaderState extends State<HomeHeader> {
                 ),
               ),
               Wrap(
-                spacing: 5,
+                spacing: 10,
                 children: [
+                  const FavoriteLocationButton(),
                   Consumer<MeasurementsProvider>(
                     builder: (context, provider, _) {
                       return AppIconButton(
@@ -96,7 +102,6 @@ class _HomeHeaderState extends State<HomeHeader> {
                       height: 35,
                       key: _locationKey,
                       clipBehavior: Clip.hardEdge,
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         border: Border.all(
                           width: 2,

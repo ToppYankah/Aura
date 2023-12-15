@@ -5,11 +5,12 @@ import 'package:aura/ui/screens/home_screen/widgets/health_tip_card.dart';
 import 'package:aura/ui/screens/home_screen/widgets/location_notifier.dart';
 import 'package:aura/ui/screens/home_screen/widgets/overview/home_overview.dart';
 import 'package:aura/ui/screens/home_screen/widgets/pollutant_info/pollutants_card.dart';
+import 'package:aura/ui/screens/home_screen/widgets/sensor_info.dart';
 import 'package:aura/ui/screens/home_screen/widgets/trend_graph/trend_graph_card.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends HomePageItem {
-  const HomePage({super.key, required super.onPagePop});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +29,8 @@ class HomePage extends HomePageItem {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   HomeOverview(),
-                  LocationNotifier(),
+                  CurrentLocationNotifier(),
                   AQISummaryCard(),
-                  ReadingsGraphCard(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -38,6 +38,8 @@ class HomePage extends HomePageItem {
                       Expanded(flex: 4, child: PollutantsCard()),
                     ],
                   ),
+                  SensorInfo(),
+                  ReadingsGraphCard(),
                   HealthTipsCard(),
                 ],
               ),

@@ -1,5 +1,5 @@
 import 'package:aura/providers/settings/settings_provider.dart';
-import 'package:aura/resources/sizes.dart';
+import 'package:aura/resources/app_sizes.dart';
 import 'package:aura/ui/global_components/app_radio_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

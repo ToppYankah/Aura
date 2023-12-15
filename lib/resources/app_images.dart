@@ -6,6 +6,7 @@ class AppImages {
   // pngs
   static const note = AssetImage('assets/images/icons/note.png');
   static const goodRange = AssetImage('assets/images/emojis/good.png');
+  static const emptyBox = AssetImage('assets/images/icons/empty-box.png');
   static const atmospherePollution =
       AssetImage('assets/images/icons/atmosphere-pollution.png');
   static const moderateRange = AssetImage('assets/images/emojis/moderate.png');
@@ -54,6 +55,14 @@ class AppImages {
   static const garbageIcon = AssetImage("assets/images/icons/garbage.png");
   static const plastics = AssetImage("assets/images/icons/plastics.png");
   static const championIcon = AssetImage("assets/images/icons/champion.png");
+
+  static const maleAvatar1 = AssetImage("assets/images/avatars/male-1.png");
+  static const maleAvatar2 = AssetImage("assets/images/avatars/male-2.png");
+  static const maleAvatar3 = AssetImage("assets/images/avatars/male-3.png");
+
+  static const femaleAvatar1 = AssetImage("assets/images/avatars/female-1.png");
+  static const femaleAvatar2 = AssetImage("assets/images/avatars/female-2.png");
+  static const femaleAvatar3 = AssetImage("assets/images/avatars/female-3.png");
 
   // jpegs
   static const locationLight =

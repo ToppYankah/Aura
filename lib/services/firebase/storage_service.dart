@@ -4,7 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'dart:typed_data';
 
-class FirebaseStorageService {
+class StorageService {
   static final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
   static Future<String> uploadFile({

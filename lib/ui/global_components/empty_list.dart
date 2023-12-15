@@ -6,19 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
 
-class EmptyList extends StatelessWidget {
+class AppEmptyPlaceholder extends StatelessWidget {
   final bool disabled;
   final String message;
+  final IconData? icon;
   final String? customSvg;
-  final ImageProvider<Object>? customImage;
   final VoidCallback? onReload;
+  final ImageProvider<Object>? customImage;
 
-  const EmptyList({
+  const AppEmptyPlaceholder({
     super.key,
+    this.icon,
     this.onReload,
     this.customSvg,
     this.customImage,
-    required this.disabled,
+    this.disabled = false,
     this.message = "List is empty",
   });
 
@@ -43,27 +45,30 @@ class EmptyList extends StatelessWidget {
               ),
             if (customImage != null)
               Opacity(
-                opacity: 0.2,
+                opacity: isDark ? 0.3 : 0.5,
                 child: Image(
                   width: 100,
                   image: customImage!,
                 ),
               ),
             if (customImage == null && customSvg == null)
-              Icon(EvaIcons.search, color: theme.paragraph),
+              Icon(icon ?? EvaIcons.search, color: theme.paragraph),
             Text(
               message,
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, color: theme.paragraph),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5.0),
-              child: AppTextButton(
-                text: "Reload",
-                disabled: disabled,
-                onTap: onReload,
-                icon: Iconsax.refresh,
-              ),
-            )
+            if (onReload != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: AppTextButton(
+                  text: "Reload",
+                  onTap: onReload,
+                  disabled: disabled,
+                  icon: Iconsax.refresh,
+                  enableBackground: true,
+                ),
+              )
           ],
         ),
       );

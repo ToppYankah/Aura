@@ -3,21 +3,36 @@
 import 'package:aura/helpers/utils/common_utils.dart';
 import 'package:aura/providers/location_provider.dart';
 import 'package:aura/resources/app_colors.dart';
-import 'package:aura/ui/global_components/app_text_button.dart';
 import 'package:aura/ui/global_components/section_card.dart';
 import 'package:aura/ui/global_components/theme_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
-class LocationNotifier extends StatefulWidget {
-  const LocationNotifier({super.key});
+class CurrentLocationNotifier extends StatefulWidget {
+  const CurrentLocationNotifier({super.key});
 
   @override
-  State<LocationNotifier> createState() => _LocationNotifierState();
+  State<CurrentLocationNotifier> createState() =>
+      _CurrentLocationNotifierState();
 }
 
-class _LocationNotifierState extends State<LocationNotifier> {
+class _CurrentLocationNotifierState extends State<CurrentLocationNotifier> {
+  void _handleUseLocation() async {
+    final provider = Provider.of<LocationProvider>(context, listen: false);
+
+    await CommonUtils.callLoader(context, () async {
+      await CommonUtils.requiresGPSPermission(
+        context,
+        provider.getUserCurrentLocation,
+      );
+    });
+
+    CommonUtils.saveLocationAsReferenceForMeasurement(
+      context,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<LocationProvider>(
@@ -26,55 +41,70 @@ class _LocationNotifierState extends State<LocationNotifier> {
             ? const SizedBox()
             : ThemeBuilder(
                 builder: (theme, isDark) => SectionCard(
+                  onTap: _handleUseLocation,
+                  showInteractiveIndicator: false,
                   margin: const EdgeInsets.only(bottom: 10.0),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20.0, vertical: 20),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                          radius: 20,
+                          radius: 15,
                           backgroundColor: isDark
-                              ? AppColors.secondary.shade400
-                              : AppColors.secondary.shade100,
-                          child: Icon(Iconsax.location5,
-                              size: 22,
-                              color: isDark
-                                  ? theme.background
-                                  : AppColors.secondary),
+                              ? AppColors.secondary.shade600
+                              : AppColors.secondary.shade200,
+                          child: Icon(
+                            Iconsax.magicpen5,
+                            size: 20,
+                            color: isDark
+                                ? theme.background
+                                : AppColors.secondary.shade600,
+                          ),
                         ),
                         Expanded(
                           child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Text(
-                              "You're now viewing from a different location.",
-                              style: TextStyle(
-                                color: theme.paragraphDeep,
-                              ),
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "It appears that this present sensor is quite distant from your location.",
+                                  style: TextStyle(
+                                    color: theme.paragraphDeep,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Builder(builder: (context) {
+                                  final color = isDark
+                                      ? AppColors.secondary
+                                      : AppColors.secondary.shade600;
+                                  return Wrap(
+                                    spacing: 10,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Find closest sensor",
+                                        style: TextStyle(
+                                          color: color,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Icon(
+                                        Iconsax.arrow_right_1,
+                                        color: color,
+                                        size: 20,
+                                      )
+                                    ],
+                                  );
+                                }),
+                              ],
                             ),
                           ),
                         ),
-                        AppTextButton(
-                          textSize: 12,
-                          paddingSpace: 15,
-                          text: "Use Current",
-                          enableBackground: true,
-                          disabled: provider.isLoading,
-                          color: isDark
-                              ? AppColors.secondary.shade300
-                              : AppColors.secondary.shade600,
-                          onTap: () async {
-                            await CommonUtils.requiresGPSPermission(
-                              context,
-                              provider.getUserCurrentLocation,
-                            );
-
-                            CommonUtils.saveLocationAsReferenceForMeasurement(
-                              context,
-                            );
-                          },
-                        )
                       ],
                     ),
                   ),
