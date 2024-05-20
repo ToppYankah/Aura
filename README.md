@@ -19,6 +19,9 @@ Air Quality Info is a mobile app designed to educate users about air quality and
 * Utilizes APIs from air quality monitoring stations for real-time data
 * Implemented with a clean and modular architecture for easy maintenance and updates
 
+### Screenshots
+![Air Quality App Screenshot](images/screenshot1.png)
+
 ### Getting Started
 
 1. Clone the repository: `git clone (link unavailable)
