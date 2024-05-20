@@ -20,7 +20,7 @@ Air Quality Info is a mobile app designed to educate users about air quality and
 * Implemented with a clean and modular architecture for easy maintenance and updates
 
 ### Screenshots
-![Air Quality App Screenshot](images/screenshot1.png)
+![Air Quality App Screenshot](https://drive.google.com/file/d/1uLxDmAj1GE0jwUB4UbrFjd2fNmxOfN4J/view?usp=sharing)
 
 ### Getting Started
 
