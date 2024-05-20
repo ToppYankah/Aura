@@ -24,7 +24,7 @@ Air Quality Info is a mobile app designed to educate users about air quality and
 
 ### Getting Started
 
-1. Clone the repository: `git clone (link unavailable)
+1. Clone the repository: `git clone [Link to repository](https://github.com/ToppYankah/Aura.git)
 2. Install dependencies: `flutter pub get`
 3. Run the app: `flutter run`
 
