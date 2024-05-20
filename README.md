@@ -25,13 +25,8 @@ Air Quality Info is a mobile app designed to educate users about air quality and
 ### Screenshots
 <div style="display: flex">
   <img src="https://drive.google.com/uc?export=view&id=1uLxDmAj1GE0jwUB4UbrFjd2fNmxOfN4J" alt="drawing" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://drive.google.com/uc?export=view&id=1_siEdQStrt3zMV6HZ4l35XNswR4hgetr" alt="drawing" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;
   <img src="https://drive.google.com/uc?export=view&id=1FgT394IqYUf8_H3gi11LyhsvtcgYAYjY" alt="drawing" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://drive.google.com/uc?export=view&id=1wySCdORZfedASVzQq3aiidMmNSYmiyFp" alt="drawing" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;
   <img src="https://drive.google.com/uc?export=view&id=1Rpihfppc90e51rz4MzqfKyvyTb9znoR2" alt="drawing" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://drive.google.com/uc?export=view&id=12qmsTfZu96wRMkiAtnFBQu61AsXYwI_S" alt="drawing" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://drive.google.com/uc?export=view&id=1CCvO5REByof52b-YaFx6I35FWAmv5El6" alt="drawing" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://drive.google.com/uc?export=view&id=13QaTZZchOD3LVg8zWxDp4NCG1j1h5mzb" alt="drawing" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 
 ### Getting Started
